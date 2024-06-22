@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @Entity
-public class Address {
+public class Address extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
     @Column(name="ADDRESS_ID")
     private Long id;
 

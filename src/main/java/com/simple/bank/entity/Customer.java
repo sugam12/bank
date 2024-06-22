@@ -6,17 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+public class Customer extends BaseEntity{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
     @Column(name = "CUSTOMER_ID")
     private Long customerId;
 
@@ -28,6 +27,9 @@ public class Customer {
 
     @Column(name = "LAST_NAME")
     private String lastName;
+
+    @Column(name = "CUSTOMER_NUMBER")
+    private Long customerNumber;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Address address;

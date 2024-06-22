@@ -13,10 +13,10 @@ import java.util.UUID;
 @Data
 @Builder
 @Entity
-public class Contact {
+public class Contact extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_seq")
     @Column(name="CONTACT_ID")
     private Long id;
 

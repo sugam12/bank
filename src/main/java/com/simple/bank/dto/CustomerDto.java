@@ -1,7 +1,5 @@
 package com.simple.bank.dto;
 
-import com.simple.bank.entity.Address;
-import com.simple.bank.entity.Contact;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -20,6 +18,8 @@ public class CustomerDto {
     private String middleName;
 
     private String lastName;
+
+    private Long customerNumber;
 
     private AddressDto address;
 

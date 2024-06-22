@@ -1,10 +1,9 @@
-package com.simple.bank.dto;
+package com.simple.bank.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,5 +12,5 @@ import org.springframework.http.HttpStatus;
 public class WsResponse {
     private String message;
     private int statusCode;
-    private Object object;
+    private Object data;
 }
