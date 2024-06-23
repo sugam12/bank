@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -14,8 +16,10 @@ import java.util.Date;
 @Entity
 @Setter
 @Getter
-public class Account {
+public class Account extends BaseEntity implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -9151839229156419306L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
     private Long accountId;

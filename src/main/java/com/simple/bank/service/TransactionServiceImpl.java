@@ -1,6 +1,8 @@
 package com.simple.bank.service;
 
 import com.simple.bank.constant.TransactionTypeEnum;
+import com.simple.bank.dto.AccountDto;
+import com.simple.bank.dto.CreateAccountDto;
 import com.simple.bank.dto.TransactionDto;
 import com.simple.bank.dto.TransferDto;
 import com.simple.bank.entity.Account;
@@ -8,6 +10,8 @@ import com.simple.bank.entity.Transaction;
 import com.simple.bank.repository.AccountRepository;
 import com.simple.bank.repository.TransactionRepository;
 import com.simple.bank.response.BankResponse;
+import com.simple.bank.response.WsResponse;
+import com.simple.bank.service.helper.EntityDtoConversionHelper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,9 +31,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private EntityDtoConversionHelper entityDtoConversionHelper;
+
     @Transactional
     @Override
-    public ResponseEntity<?> transfer(TransferDto transferDto) {
+    public ResponseEntity<WsResponse> transfer(TransferDto transferDto) {
 
         Optional<Account> optionalSourceAccount = accountRepository.findByAccountNumber(transferDto.getFromAccountNumber().getAccountNumber());
         Optional<Account> optionalTargetAccount = accountRepository.findByAccountNumber(transferDto.getToAccountNumber().getAccountNumber());
@@ -58,9 +65,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Transactional
     @Override
-    public ResponseEntity<?> withdraw(TransactionDto transactionDto) {
+    public ResponseEntity<WsResponse> withdraw(TransactionDto transactionDto) {
 
-        Optional<Account> optionalSourceAccount = accountRepository.findByAccountNumber(transactionDto.getFromAccountNumber());
+        Optional<Account> optionalSourceAccount = accountRepository.findByAccountNumber(transactionDto.getAccountNumber());
         if (optionalSourceAccount.isPresent()) {
             Account sourceAccount = optionalSourceAccount.get();
             if (!amountAvailable(sourceAccount.getCurrentBalance(), transactionDto.getAmount())) {
@@ -73,13 +80,13 @@ public class TransactionServiceImpl implements TransactionService {
             insertIntoTransaction(sourceAccount, transactionDto);
             return BankResponse.successResponse(WITHDRAW_SUCCESS_MESSAGE, HttpStatus.OK.value());
         }
-        return BankResponse.failureResponse(FAILURE_ACCOUNT_NOT_FOUND_MESSAGE + transactionDto.getFromAccountNumber(), HttpStatus.BAD_REQUEST.value());
+        return BankResponse.failureResponse(FAILURE_ACCOUNT_NOT_FOUND_MESSAGE + transactionDto.getAccountNumber(), HttpStatus.BAD_REQUEST.value());
     }
 
     @Transactional
     @Override
-    public ResponseEntity<?> deposit(TransactionDto transactionDto) {
-        Optional<Account> optionalSourceAccount = accountRepository.findByAccountNumber(transactionDto.getFromAccountNumber());
+    public ResponseEntity<WsResponse> deposit(TransactionDto transactionDto) {
+        Optional<Account> optionalSourceAccount = accountRepository.findByAccountNumber(transactionDto.getAccountNumber());
         if (optionalSourceAccount.isPresent()) {
             Account sourceAccount = optionalSourceAccount.get();
             sourceAccount.setCurrentBalance(sourceAccount.getCurrentBalance() + transactionDto.getAmount());
@@ -87,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
             insertIntoTransaction(sourceAccount, transactionDto);
             return BankResponse.successResponse(DEPOSIT_SUCCESS_MESSAGE, HttpStatus.OK.value());
         }
-        return BankResponse.failureResponse(FAILURE_ACCOUNT_NOT_FOUND_MESSAGE + transactionDto.getFromAccountNumber(), HttpStatus.BAD_REQUEST.value());
+       return BankResponse.failureResponse(FAILURE_ACCOUNT_NOT_FOUND_MESSAGE + transactionDto.getAccountNumber(), HttpStatus.BAD_REQUEST.value());
     }
 
     @Override

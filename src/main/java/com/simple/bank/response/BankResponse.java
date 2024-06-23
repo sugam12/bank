@@ -4,6 +4,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static com.simple.bank.constant.Constant.FETCH_SUCCESSFUL;
+
 @NoArgsConstructor
 public class BankResponse {
     public static ResponseEntity<WsResponse> successResponse(String message, int statusCode) {
@@ -23,7 +25,7 @@ public class BankResponse {
 
     public static ResponseEntity<WsResponse> getResponse(Object object) {
         WsResponse r = new WsResponse();
-        r.setMessage("Fetch Successfully");
+        r.setMessage(FETCH_SUCCESSFUL);
         r.setStatusCode(HttpStatus.OK.value());
         r.setData(object);
         return ResponseEntity.status(HttpStatus.OK).body(r);

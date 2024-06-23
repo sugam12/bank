@@ -6,14 +6,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer extends BaseEntity{
+public class Customer extends BaseEntity implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 3483925492802158746L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
     @Column(name = "CUSTOMER_ID")
@@ -28,7 +33,7 @@ public class Customer extends BaseEntity{
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    @Column(name = "CUSTOMER_NUMBER")
+    @Column(name = "CUSTOMER_NUMBER", unique = true)
     private Long customerNumber;
 
     @ManyToOne(cascade = CascadeType.ALL)

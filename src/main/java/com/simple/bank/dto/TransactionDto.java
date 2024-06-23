@@ -12,13 +12,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TransactionDto {
-    @NotBlank(message = "From Account Number must not be blank")
-    private String fromAccountNumber;
+    @NotBlank(message = "Account Number must not be blank")
+    private String accountNumber;
 
-    @NotBlank(message = "Transaction Type must not be blank")
     private TransactionTypeEnum transactionTypeEnum;
 
-    @NotBlank(message = "Amount must not be blank")
     private double amount;
 
 }

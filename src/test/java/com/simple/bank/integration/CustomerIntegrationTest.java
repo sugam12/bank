@@ -1,6 +1,6 @@
 package com.simple.bank.integration;
 
-import com.simple.bank.controller.CustomerController;
+import com.simple.bank.controller.CustomerRestController;
 import com.simple.bank.dto.AddressDto;
 import com.simple.bank.dto.ContactDto;
 import com.simple.bank.dto.CustomerDto;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import static com.simple.bank.constant.Constant.FETCH_SUCCESSFUL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerIntegrationTest {
 
     @Autowired
-    private CustomerController customerController;
+    private CustomerRestController customerRestController;
 
     @Test
     void givenCustomerDetails_whenInsertingCustomer_thenVerifyCustomer() {
@@ -29,7 +30,7 @@ class CustomerIntegrationTest {
         customer.setContact(new ContactDto("sugamachr@gmail.com", "0841987879", "234568678"));
 
         // when
-        var body = customerController.addCustomer(customer).getBody();
+        var body = customerRestController.addCustomer(customer).getBody();
 
         // then
         var response = (WsResponse) body;
@@ -48,12 +49,12 @@ class CustomerIntegrationTest {
         customer.setContact(new ContactDto("sugamachr@gmail.com", "0841987879", "234568678"));
 
         // when
-        var body = customerController.getCustomer().getBody();
+        var body = customerRestController.getCustomer().getBody();
 
         // then
         var response = (WsResponse) body;
         assertThat(response).isNotNull();
-        assertThat(response.getMessage()).isEqualTo("Fetch Successfully");
+        assertThat(response.getMessage()).isEqualTo(FETCH_SUCCESSFUL);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 }

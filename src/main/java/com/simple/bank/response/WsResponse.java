@@ -1,14 +1,13 @@
 package com.simple.bank.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
+@EqualsAndHashCode
+@ToString
 public class WsResponse {
     private String message;
     private int statusCode;

@@ -34,7 +34,7 @@ public class BankApplicationTests {
     @MockBean
     CustomerRepository customerRepository;
 
-    @Test
+    @Test()
     public void testFindAllCustomerUsingMock() {
         List<Customer> customerList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {

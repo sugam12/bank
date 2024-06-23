@@ -7,9 +7,11 @@ import com.simple.bank.exception.CustomerNotFoundException;
 import com.simple.bank.repository.AccountRepository;
 import com.simple.bank.repository.CustomerRepository;
 import com.simple.bank.response.BankResponse;
+import com.simple.bank.response.WsResponse;
 import com.simple.bank.service.helper.EntityDtoConversionHelper;
 import com.simple.bank.utility.AccountNumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
 
     @Override
-    public CreateAccountDto createAccount(CreateAccountDto createAccountDto) throws CustomerNotFoundException {
+    public ResponseEntity<WsResponse> createAccount(CreateAccountDto createAccountDto) {
         AccountNumberUtils accountNumberUtils = new AccountNumberUtils();
 
         Optional<Customer> customer = customerRepository.findByCustomerNumber(createAccountDto.getCustomerNumber());
@@ -38,9 +40,9 @@ public class AccountServiceImpl implements AccountService {
             Account account = entityDtoConversionHelper.convertToAccountEntity(createAccountDto);
             account.setAccountNumber(accountNumberUtils.generate());
             accountRepository.save(account);
-            return entityDtoConversionHelper.convertToAccountDto(account);
+            return BankResponse.successResponse(ACCOUNT_SUCCESS_MESSAGE, HttpStatus.CREATED.value());
         }
-        throw new CustomerNotFoundException(FAILURE_CUSTOMER_NOT_FOUND_MESSAGE);
+        return BankResponse.failureResponse(FAILURE_CUSTOMER_NOT_FOUND_MESSAGE, HttpStatus.BAD_REQUEST.value());
     }
 
     @Override
@@ -50,9 +52,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public CreateAccountDto findByAccountNumber(String accountNumber) throws CustomerNotFoundException {
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new CustomerNotFoundException(FAILURE_CUSTOMER_NOT_FOUND_MESSAGE));
-        return entityDtoConversionHelper.convertToAccountDto(account);
+    public ResponseEntity<WsResponse> findByAccountNumber(String accountNumber) {
+        Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
+        return account.map(value -> BankResponse.getResponse(entityDtoConversionHelper.convertToAccountDto(value))).orElseGet(() -> BankResponse.failureResponse(FAILURE_CUSTOMER_NOT_FOUND_MESSAGE, HttpStatus.BAD_REQUEST.value()));
     }
 }
