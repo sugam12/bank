@@ -1,0 +1,66 @@
+
+http://localhost:8181/api/v1/customers POST
+Create customer using:
+{
+    "firstName":"Sugam",
+    "lastName": "Acharya",
+    "middleName": "-",
+    "customerNumber": "123467",
+    "address": {
+        "city": "WA",
+        "state": "WA",
+        "zip": "6102",
+        "country": "Australia"
+    },
+    "contact": {
+        "emailId": "sugamachr@gmail.com",
+        "homePhone": "989283934",
+        "officePhone": "34324234"
+    }
+}
+
+http://localhost:8181/api/v1/customers GET
+
+
+http://localhost:8181/api/v1/account POST
+Create account using customerNumber which generates an account number.
+
+{
+    "customerNumber": 12346
+}
+
+
+http://localhost:8181/api/v1/deposit POST
+Deposit Using account number generated above.
+{
+    "accountNumber": "2024215692",
+    "transactionTypeEnum": "DEPOSIT",
+    "amount": 300.00
+}
+
+http://localhost:8181/api/v1/withdraw POST
+Withdraw Using account number generated above.
+{
+    "accountNumber": "2024215692",
+    "transactionTypeEnum": "WITHDRAW",
+    "amount": 100.00
+}
+
+http://localhost:8181/api/v1/transfer POST
+Transfer between two accounts. Both account should be exists in the system.
+
+{
+    "fromAccountNumber":{
+        "accountNumber": "2024182867"
+    },
+    "toAccountNumber":{
+        "accountNumber":"2024215692"
+    },
+    "amount": 100
+}
+
+http://localhost:8181/api/v1/find-by-account-number POST
+Find by account number 
+{
+    "accountNumber": "2024215692"
+}

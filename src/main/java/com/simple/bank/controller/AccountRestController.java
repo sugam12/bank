@@ -59,7 +59,7 @@ public class AccountRestController {
      * @param accountDto Account number of customer to be fetched
      * @return The response entity with success or failure if customer number is not found
      */
-    @PostMapping(path = "/findAccountNumber")
+    @PostMapping(path = "/find-by-account-number")
     @ApiOperation(value = "Find a individual Account ", notes = "Find Accounts using Account Number")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad Request"),
