@@ -15,7 +15,7 @@ import java.util.Objects;
 public class CreateAccountDto {
 
     @NotBlank(message = "Customer Number must not be blank")
-    private Long customerNumber;
+    private String customerNumber;
 
     private String accountNumber;
 

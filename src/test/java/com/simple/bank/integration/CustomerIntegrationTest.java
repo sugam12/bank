@@ -21,7 +21,7 @@ class CustomerIntegrationTest {
     private CustomerRestController customerRestController;
 
     @Test
-    void givenCustomerDetails_whenInsertingCustomer_thenVerifyCustomer() {
+    public void givenCustomerDetailsWhenInsertingCustomerThenVerifyCustomer() {
         // given
         var customer = new CustomerDto();
         customer.setFirstName("Dummy");
@@ -40,7 +40,7 @@ class CustomerIntegrationTest {
     }
 
     @Test
-    void givenCustomerDetails_whenGettingCustomer_thenVerifyCustomer() {
+    public void givenCustomerDetailsWhenGettingCustomerThenVerifyCustomer() {
         // given
         var customer = new CustomerDto();
         customer.setFirstName("Dummy");

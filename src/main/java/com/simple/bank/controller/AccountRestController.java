@@ -23,6 +23,12 @@ public class AccountRestController {
     @Autowired
     private AccountService accountService;
 
+    /**
+     * Create an Account for customer
+     *
+     * @param createAccountDto The account Information to be added
+     * @return The response entity with success or failure if customer number is not found
+     */
     @PostMapping(path = "/account",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,6 +53,12 @@ public class AccountRestController {
         return accountService.getAllAccountWithBalance();
     }
 
+    /**
+     * Find an Account for customer with account number
+     *
+     * @param accountDto Account number of customer to be fetched
+     * @return The response entity with success or failure if customer number is not found
+     */
     @PostMapping(path = "/findAccountNumber")
     @ApiOperation(value = "Find a individual Account ", notes = "Find Accounts using Account Number")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success"),

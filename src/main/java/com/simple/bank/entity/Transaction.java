@@ -1,6 +1,5 @@
 package com.simple.bank.entity;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.simple.bank.constant.TransactionTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,11 +37,9 @@ public class Transaction extends BaseEntity implements Serializable {
     @Column(name = "TO_ACCOUNT_NUMBER")
     private String toAccountNumber;
 
-    //@Temporal(TemporalType.TIME)
     @Column(name = "TRANSACTION_INITIATED_DATE")
     private LocalDateTime transactionInitiatedDate;
 
-    //@Temporal(TemporalType.TIME)
     @Column(name = "TRANSACTION_COMPLETED_DATE")
     private LocalDateTime transactionCompletedDate;
 }

@@ -7,11 +7,13 @@ import com.simple.bank.entity.Account;
 import com.simple.bank.repository.AccountRepository;
 import com.simple.bank.response.WsResponse;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "local")
+@RunWith(SpringRunner.class)
 class TransactionIntegrationTest {
 
     @Autowired
@@ -30,7 +33,7 @@ class TransactionIntegrationTest {
     private AccountRepository accountRepository;
 
     @Test
-    void givenTransactionDetails_whenDepositAmount_thenVerifyDepositSuccess() {
+    public void givenTransactionDetailsWhenDepositAmountThenVerifyDepositSuccess() {
         // given
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setAccountNumber("1223232");
@@ -39,7 +42,7 @@ class TransactionIntegrationTest {
 
         Account account = new Account();
         account.setAccountType("SAVING");
-        account.setCustomerNumber(234234L);
+        account.setCustomerNumber("234234");
         account.setAccountNumber(transactionDto.getAccountNumber());
         account.setCurrentBalance(120.00);
         Optional<Account> accountOptional = Optional.of(account);
@@ -59,7 +62,7 @@ class TransactionIntegrationTest {
     }
 
     @Test
-    void givenTransactionDetails_whenDepositAmount_thenVerifyDepositFail() {
+    public void givenTransactionDetailsWhenDepositAmountThenVerifyDepositFail() {
         // given
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setAccountNumber("1223232");
@@ -79,7 +82,7 @@ class TransactionIntegrationTest {
     }
 
     @Test
-    void givenTransactionDetails_whenWithDrawAmount_thenVerifyWithDrawSuccess() {
+    public void givenTransactionDetailsWhenWithDrawAmountThenVerifyWithDrawSuccess() {
         // given
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setAccountNumber("1223232");
@@ -88,7 +91,7 @@ class TransactionIntegrationTest {
 
         Account account = new Account();
         account.setAccountType("SAVING");
-        account.setCustomerNumber(234234L);
+        account.setCustomerNumber("234234");
         account.setAccountNumber(transactionDto.getAccountNumber());
         account.setCurrentBalance(120.00);
         Optional<Account> accountOptional = Optional.of(account);
@@ -106,7 +109,7 @@ class TransactionIntegrationTest {
     }
 
     @Test
-    void givenTransactionDetails_whenWithDrawAmount_thenVerifyWithDrawFail() {
+    public void givenTransactionDetailsWhenWithDrawAmountThenVerifyWithDrawFail() {
         // given
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setAccountNumber("1223232");
@@ -124,7 +127,7 @@ class TransactionIntegrationTest {
     }
 
     @Test
-    void givenTransactionDetails_whenWithDrawAmount_thenVerifyInsuffientBalance() {
+    public void givenTransactionDetailsWhenWithDrawAmountThenVerifyInsufficientBalance() {
         // given
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setAccountNumber("1223232");
@@ -133,7 +136,7 @@ class TransactionIntegrationTest {
 
         Account account = new Account();
         account.setAccountType("SAVING");
-        account.setCustomerNumber(234234L);
+        account.setCustomerNumber("234234");
         account.setAccountNumber(transactionDto.getAccountNumber());
         account.setCurrentBalance(100.00);
         Optional<Account> accountOptional = Optional.of(account);

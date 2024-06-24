@@ -22,8 +22,13 @@ public class CustomerRestController {
     @Autowired
     private CustomerService customerService;
 
+    /**
+     * Find all customers from the system
+     *
+     * @return ResponseEntity of WsResponse with list of customer inside the object
+     */
     @GetMapping(path = "/customers")
-    @ApiOperation(value = "Find all Customers", notes = "Fill All Customers with Address and Contact")
+    @ApiOperation(value = "Find all Customers", notes = "Find All Customers with Address and Contact")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 500, message = "Internal Server Error")})
@@ -32,8 +37,14 @@ public class CustomerRestController {
         return customerService.findAll();
     }
 
+    /**
+     * Add customer to system
+     *
+     * @param customerDto Customer Data to be added
+     * @return Response Entity of WsResponse with success or failure message
+     */
     @PostMapping(path = "/customers")
-    @ApiOperation(value = "Add a Customer", notes = "Add customer and create an account")
+    @ApiOperation(value = "Add a Customer", notes = "Add customer to the system")
     @ApiResponses(value = {@ApiResponse(code = 201, message = "Success"),
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 500, message = "Internal Server Error")})

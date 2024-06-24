@@ -29,7 +29,7 @@ public class EntityDtoConversionHelperTest {
         customerDto.setFirstName("test");
         customerDto.setLastName("test");
         customerDto.setMiddleName("test");
-        customerDto.setCustomerNumber(4144423434L);
+        customerDto.setCustomerNumber("4144423434L");
         customerDto.setAddress(getAddressDTO());
         customerDto.setContact(getContactDTO());
         Customer customer = entityDtoConversionHelper.convertCustomerEntity(customerDto);
@@ -86,7 +86,7 @@ public class EntityDtoConversionHelperTest {
         customer.setFirstName("test");
         customer.setLastName("test");
         customer.setMiddleName("test");
-        customer.setCustomerNumber(4144423434L);
+        customer.setCustomerNumber("4144423434");
         customer.setAddress(getAddress());
         customer.setContact(getContact());
         CustomerDto customerDto = entityDtoConversionHelper.convertToCustomerDto(customer);
@@ -107,7 +107,7 @@ public class EntityDtoConversionHelperTest {
     public void convertToAccountEntityTest() {
         CreateAccountDto createAccountDto = new CreateAccountDto();
         createAccountDto.setAccountNumber("20245678");
-        createAccountDto.setCustomerNumber(23467777L);
+        createAccountDto.setCustomerNumber("23467777");
         createAccountDto.setCurrentBalance(100.00);
         Account account = entityDtoConversionHelper.convertToAccountEntity(createAccountDto);
         assertEquals(createAccountDto.getCustomerNumber(), account.getCustomerNumber());
@@ -118,7 +118,7 @@ public class EntityDtoConversionHelperTest {
     public void convertToAccountDtoTest() {
         Account createAccountDto = new Account();
         createAccountDto.setAccountNumber("20245678");
-        createAccountDto.setCustomerNumber(23467777L);
+        createAccountDto.setCustomerNumber("23467777");
         createAccountDto.setCurrentBalance(100.00);
         CreateAccountDto account = entityDtoConversionHelper.convertToAccountDto(createAccountDto);
         assertEquals(createAccountDto.getCustomerNumber(), account.getCustomerNumber());

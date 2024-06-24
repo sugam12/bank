@@ -24,10 +24,10 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     /**
-     * CREATE CUSTOMER
+     * CREATE CUSTOMER and add to the system
      *
-     * @param customerDto
-     * @return
+     * @param customerDto The Customer Data to be added
+     * @return Response entity with Customer registration successfully
      */
     @Override
     public ResponseEntity<WsResponse> addCustomer(CustomerDto customerDto) {
@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
     /**
      * Find all the Customer List wrapped in WsResponse
      *
-     * @return
+     * @return Response Entity of all the customer data
      */
     @Override
     public ResponseEntity<WsResponse> findAll() {

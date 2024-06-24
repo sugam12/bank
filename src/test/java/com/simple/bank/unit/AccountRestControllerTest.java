@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
@@ -27,14 +26,14 @@ class AccountRestControllerTest {
     private AccountService accountService;
 
     @Test
-    void givenMissingAccountForInput_whenCreatingAccount_thenVerifyBadRequest() throws Exception {
+    public void givenMissingAccountForInput_whenCreatingAccount_thenVerifyBadRequest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/v1/account")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
-    void givenAccountForInput_whenCreatingAccount_thenVerifyIsOk() throws Exception {
+    public void givenAccountForInput_whenCreatingAccount_thenVerifyIsOk() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/v1/account")
                 .content("{\"customerNumber\": \"5368\"}")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -52,7 +51,7 @@ class AccountRestControllerTest {
     }
 */
     @Test
-    void givenAccountNumberForAccountDetail_whenCreatingAccount_thenVerifyAccount() throws Exception {
+    public void givenAccountNumberForAccountDetail_whenCreatingAccount_thenVerifyAccount() throws Exception {
         given(accountService.findByAccountNumber(null)).willReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.get("/api/v1/account")

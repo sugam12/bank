@@ -19,7 +19,7 @@ public class CustomerDto {
 
     private String lastName;
 
-    private Long customerNumber;
+    private String customerNumber;
 
     private AddressDto address;
 

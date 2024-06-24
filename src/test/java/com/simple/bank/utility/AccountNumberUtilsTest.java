@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.Year;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -21,5 +22,13 @@ public class AccountNumberUtilsTest {
         String accountNumber = accountNumberUtils.generate();
         String expectedYear = accountNumber.substring(0,4);
         assertEquals(String.valueOf(currentYear), expectedYear);
+    }
+    @Test
+    public void testGenerateInvalid() {
+        Year currentYear = Year.now();;
+        AccountNumberUtils accountNumberUtils = new AccountNumberUtils();
+        String accountNumber = accountNumberUtils.generate();
+        String expectedYear = accountNumber.substring(0,5);
+        assertNotNull(String.valueOf(currentYear), expectedYear);
     }
 }

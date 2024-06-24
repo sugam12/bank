@@ -25,7 +25,7 @@ public class Account extends BaseEntity implements Serializable {
     private Long accountId;
 
     @Column(name = "CUSTOMER_NUMBER")
-    private Long customerNumber;
+    private String customerNumber;
 
     @Column(name = "ACCOUNT_NUMBER")
     private String accountNumber;

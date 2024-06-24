@@ -34,7 +34,7 @@ public class Customer extends BaseEntity implements Serializable {
     private String lastName;
 
     @Column(name = "CUSTOMER_NUMBER", unique = true)
-    private Long customerNumber;
+    private String customerNumber;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Address address;

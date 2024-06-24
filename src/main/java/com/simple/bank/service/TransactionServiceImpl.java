@@ -34,6 +34,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private EntityDtoConversionHelper entityDtoConversionHelper;
 
+    /**
+     * Transfer amount from one account to another if exists
+     *
+     * @param transferDto The Transfer data
+     * @return Response Entity with WsResponse with either Success or failure
+     */
     @Transactional
     @Override
     public ResponseEntity<WsResponse> transfer(TransferDto transferDto) {
@@ -59,10 +65,17 @@ public class TransactionServiceImpl implements TransactionService {
             }
 
             insertIntoTransaction(sourceAccount, targetAccount, transferDto);
-            return BankResponse.successResponse("Transfer successful", HttpStatus.OK.value());
+            return BankResponse.successResponse(TRANSFER_SUCCESS_MESSAGE, HttpStatus.OK.value());
         }
     }
 
+    /**
+     * Withdraw an amount from the system of corresponding customer
+     * Checks if sufficient balance is available in account
+     *
+     * @param transactionDto contains data and amount
+     * @return Response entity wrapped with WsResponse
+     */
     @Transactional
     @Override
     public ResponseEntity<WsResponse> withdraw(TransactionDto transactionDto) {
@@ -78,11 +91,17 @@ public class TransactionServiceImpl implements TransactionService {
             }
 
             insertIntoTransaction(sourceAccount, transactionDto);
-            return BankResponse.successResponse(WITHDRAW_SUCCESS_MESSAGE, HttpStatus.OK.value());
+            return BankResponse.successResponse(WITHDRAW_SUCCESS_MESSAGE, HttpStatus.OK.value(), entityDtoConversionHelper.convertToAccountDto(sourceAccount));
         }
         return BankResponse.failureResponse(FAILURE_ACCOUNT_NOT_FOUND_MESSAGE + transactionDto.getAccountNumber(), HttpStatus.BAD_REQUEST.value());
     }
 
+    /**
+     * Deposit amount to the system of corresponding customer
+     *
+     * @param transactionDto contains data and amount
+     * @return Response entity wrapped with WsResponse
+     */
     @Transactional
     @Override
     public ResponseEntity<WsResponse> deposit(TransactionDto transactionDto) {
@@ -92,9 +111,10 @@ public class TransactionServiceImpl implements TransactionService {
             sourceAccount.setCurrentBalance(sourceAccount.getCurrentBalance() + transactionDto.getAmount());
             accountRepository.save(sourceAccount);
             insertIntoTransaction(sourceAccount, transactionDto);
-            return BankResponse.successResponse(DEPOSIT_SUCCESS_MESSAGE, HttpStatus.OK.value());
+
+            return BankResponse.successResponse(DEPOSIT_SUCCESS_MESSAGE, HttpStatus.OK.value(), entityDtoConversionHelper.convertToAccountDto(sourceAccount));
         }
-       return BankResponse.failureResponse(FAILURE_ACCOUNT_NOT_FOUND_MESSAGE + transactionDto.getAccountNumber(), HttpStatus.BAD_REQUEST.value());
+        return BankResponse.failureResponse(FAILURE_ACCOUNT_NOT_FOUND_MESSAGE + transactionDto.getAccountNumber(), HttpStatus.BAD_REQUEST.value());
     }
 
     @Override
@@ -112,6 +132,13 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.save(transaction);
     }
 
+    /**
+     * Method to insert every transfer in the system
+     *
+     * @param sourceAccount Source Account Data
+     * @param toAccount     Target Account Data
+     * @param transferDto   Transfer Data
+     */
     private void insertIntoTransaction(Account sourceAccount, Account toAccount, TransferDto transferDto) {
         var transaction = new Transaction();
         transaction.setTransactionTypeEnum(TransactionTypeEnum.TRANSFER);
@@ -123,14 +150,14 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.save(transaction);
     }
 
+    /**
+     * Method to check if currentBalance is less than amount to be withdrawn or transfer
+     *
+     * @param currentBalance Current Balance
+     * @param amount         Amount to be transferred
+     * @return Returns true or false
+     */
     private boolean amountAvailable(double currentBalance, double amount) {
         return (currentBalance - amount) >= 0;
-    }
-
-    private void updateAccount(Account sourceAccount, Account targetAccount, TransferDto transferDto) {
-        sourceAccount.setCurrentBalance(sourceAccount.getCurrentBalance() - transferDto.getAmount());
-        targetAccount.setCurrentBalance(targetAccount.getCurrentBalance() + transferDto.getAmount());
-        accountRepository.save(sourceAccount);
-        accountRepository.save(targetAccount);
     }
 }

@@ -13,29 +13,31 @@ import com.simple.bank.repository.CustomerRepository;
 import com.simple.bank.response.WsResponse;
 import com.simple.bank.service.helper.EntityDtoConversionHelper;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static com.simple.bank.constant.Constant.FAILURE_CUSTOMER_NOT_FOUND_MESSAGE;
-import static com.simple.bank.constant.Constant.FETCH_SUCCESSFUL;
+import static com.simple.bank.constant.Constant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "local")
+@RunWith(SpringRunner.class)
 class AccountIntegrationTest {
 
     @Autowired
     private AccountRestController accountRestController;
 
     @Autowired
-    EntityDtoConversionHelper entityDtoConversionHelper;
+    private EntityDtoConversionHelper entityDtoConversionHelper;
 
     @MockBean
     private CustomerRepository customerRepository;
@@ -44,12 +46,12 @@ class AccountIntegrationTest {
     private AccountRepository accountRepository;
 
     @Test
-    void givenAccountDetails_whenCreateAccount_thenVerifyAccount() throws CustomerNotFoundException {
+    public void givenAccountDetailsWhenCreateAccountThenVerifyAccount() throws CustomerNotFoundException {
         // given
         var accountDto = new CreateAccountDto();
         accountDto.setAccountNumber("20243435");
         accountDto.setCurrentBalance(0.0);
-        accountDto.setCustomerNumber(12323L);
+        accountDto.setCustomerNumber("12323");
 
         Customer customer = new Customer();
         customer.setFirstName("Test1");
@@ -57,7 +59,7 @@ class AccountIntegrationTest {
         customer.setAddress(new Address(1L, "Perth", "Western Australia", "0612", "Australia"));
         customer.setContact(new Contact(1L, "sugamachr@gmail.com", "0841987879", "234568678"));
         Optional<Customer> customerOptional = Optional.of(customer);
-        when(customerRepository.findByCustomerNumber(12323L)).thenReturn(customerOptional);
+        when(customerRepository.findByCustomerNumber("12323")).thenReturn(customerOptional);
 
         // when
         var body = accountRestController.createAccount(accountDto).getBody();
@@ -66,22 +68,22 @@ class AccountIntegrationTest {
         var response = (WsResponse) body;
 
         assertThat(response).isNotNull();
-        assertThat(response.getMessage()).isEqualTo(FETCH_SUCCESSFUL);
-        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getMessage()).isEqualTo(ACCOUNT_SUCCESS_MESSAGE);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(response.getData()).isNotNull();
         var data = (CreateAccountDto) ((WsResponse) body).getData();
         // assertThat(data.getAccountNumber()).isEqualTo(20243435);
-        assertThat(data.getCustomerNumber()).isEqualTo(12323L);
+        assertThat(data.getCustomerNumber()).isEqualTo(accountDto.getCustomerNumber());
         assertThat(data.getCurrentBalance()).isEqualTo(0.0);
     }
 
     @Test
-    void givenAccountDetails_whenCreatingAccount_thenVerifyAccountFail() throws CustomerNotFoundException {
+    public void givenAccountDetailsWhenCreatingAccountThenVerifyAccountFail() throws CustomerNotFoundException {
         // given
         var accountDto = new CreateAccountDto();
         accountDto.setAccountNumber("20243435");
         accountDto.setCurrentBalance(0.0);
-        accountDto.setCustomerNumber(12323L);
+        accountDto.setCustomerNumber("12323");
 
         // when
         var body = accountRestController.createAccount(accountDto).getBody();
@@ -96,13 +98,13 @@ class AccountIntegrationTest {
     }
 
     @Test
-    void givenAccountNumber_whenGettingAccountDetails_thenVerifyAccountDetails() throws CustomerNotFoundException {
+    public void givenAccountNumberWhenGettingAccountDetailsThenVerifyAccountDetails() throws CustomerNotFoundException {
         // given
         var accountDto = new AccountDto();
         accountDto.setAccountNumber("2024454566");
         Account account = new Account();
         account.setAccountType("SAVING");
-        account.setCustomerNumber(234234L);
+        account.setCustomerNumber("234234");
         account.setAccountNumber(accountDto.getAccountNumber());
         account.setCurrentBalance(120.00);
         Optional<Account> accountOptional = Optional.of(account);
@@ -118,12 +120,12 @@ class AccountIntegrationTest {
         assertThat(response.getData()).isNotNull();
         var data = (CreateAccountDto) ((WsResponse) body).getData();
         assertThat(data.getAccountNumber()).isEqualTo(account.getAccountNumber());
-        assertThat(data.getCustomerNumber()).isEqualTo(234234L);
+        assertThat(data.getCustomerNumber()).isEqualTo(account.getCustomerNumber());
         assertThat(data.getCurrentBalance()).isEqualTo(120.00);
     }
 
     @Test
-    void givenAccountNumber_whenGettingAccountDetails_thenVerifyOkAccountDetails() throws CustomerNotFoundException {
+    public void givenAccountNumberWhenGettingAccountDetailsThenVerifyOkAccountDetails() throws CustomerNotFoundException {
         // given
         var accountDto = new AccountDto();
         accountDto.setAccountNumber("2024454566");
@@ -138,7 +140,6 @@ class AccountIntegrationTest {
         Optional<Account> expectedAccountNumber = Optional.of(account);
         when(accountRepository.findByAccountNumber(accountDto.getAccountNumber()))
                 .thenReturn(expectedAccountNumber);
-        // assertThrows(CustomerNotFoundException.class, () -> accountRestController.getAccount(accountDto));
         var body = accountRestController.getAccount(accountDto).getBody();
 
         // then
@@ -152,7 +153,7 @@ class AccountIntegrationTest {
     }
 
     @Test
-    void givenAccountNumber_whenGettingAccountDetails_thenVerifyFailingAccountDetails() throws CustomerNotFoundException {
+    public void givenAccountNumberWhenGettingAccountDetailsThenVerifyFailingAccountDetails() {
         // given
         var accountDto = new AccountDto();
         accountDto.setAccountNumber("2024454566");
